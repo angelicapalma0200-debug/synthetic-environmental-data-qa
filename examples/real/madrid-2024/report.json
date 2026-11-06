@@ -1,0 +1,127 @@
+{
+  "purpose": "Independent demonstration; not evidence of ecological change",
+  "software_versions": {
+    "python": "3.11.18",
+    "numpy": "2.4.6",
+    "rasterio": "1.4.4",
+    "matplotlib": "3.11.2",
+    "requests": "2.34.2"
+  },
+  "run_config": {
+    "site_label": "Madrid urban mosaic, Spain (outside the study region)",
+    "bbox": [
+      -3.691,
+      40.412,
+      -3.679,
+      40.421
+    ],
+    "target_epsg": 32630,
+    "resolution_m": 10,
+    "max_scene_cloud_pct": 50,
+    "intervals": {
+      "earlier": "2024-04-15T00:00:00Z/2024-05-31T23:59:59Z",
+      "later": "2024-08-15T00:00:00Z/2024-09-30T23:59:59Z"
+    }
+  },
+  "period_order": [
+    "earlier",
+    "later"
+  ],
+  "n_grid_pixels": 10506,
+  "grid_epsg": 32630,
+  "grid_transform": [
+    10.0,
+    0.0,
+    441370.0,
+    0.0,
+    -10.0,
+    4474720.0
+  ],
+  "scl_eligible_classes": [
+    4,
+    5
+  ],
+  "qa_codes": {
+    "0": "outside_area_of_interest",
+    "1": "excluded_by_scene_classification",
+    "2": "invalid_reflectance_or_denominator",
+    "3": "valid_terrestrial_ndvi"
+  },
+  "periods": {
+    "earlier": {
+      "n_aoi_pixels": 10163,
+      "n_valid_pixels": 9899,
+      "valid_fraction": 0.974023,
+      "n_scl_excluded": 264,
+      "n_spectral_invalid": 0,
+      "scl_class_counts": {
+        "2": 32,
+        "4": 6639,
+        "5": 3260,
+        "6": 232
+      },
+      "mean_valid_ndvi": 0.5798013210296631,
+      "item_id": "S2B_30TVK_20240417_0_L2A",
+      "item_datetime": "2024-04-17T11:10:08.072000Z",
+      "scene_cloud_percentage": 0.005965,
+      "stac_item_metadata_sha256": "a912fd567ac2d176c94985b8162782a1d7425e801d231c0f60c5cde3af8478e6",
+      "asset_hrefs": {
+        "red": "https://sentinel-cogs.s3.us-west-2.amazonaws.com/sentinel-s2-l2a-cogs/30/T/VK/2024/4/S2B_30TVK_20240417_0_L2A/B04.tif",
+        "nir": "https://sentinel-cogs.s3.us-west-2.amazonaws.com/sentinel-s2-l2a-cogs/30/T/VK/2024/4/S2B_30TVK_20240417_0_L2A/B08.tif",
+        "scl": "https://sentinel-cogs.s3.us-west-2.amazonaws.com/sentinel-s2-l2a-cogs/30/T/VK/2024/4/S2B_30TVK_20240417_0_L2A/SCL.tif"
+      },
+      "calibration": {
+        "red": {
+          "scale": 0.0001,
+          "effective_offset": 0.0
+        },
+        "nir": {
+          "scale": 0.0001,
+          "effective_offset": 0.0
+        }
+      }
+    },
+    "later": {
+      "n_aoi_pixels": 10163,
+      "n_valid_pixels": 9915,
+      "valid_fraction": 0.975598,
+      "n_scl_excluded": 248,
+      "n_spectral_invalid": 0,
+      "scl_class_counts": {
+        "2": 16,
+        "4": 6622,
+        "5": 3293,
+        "6": 232
+      },
+      "mean_valid_ndvi": 0.5442769527435303,
+      "item_id": "S2B_30TVK_20240815_0_L2A",
+      "item_datetime": "2024-08-15T11:10:10.559000Z",
+      "scene_cloud_percentage": 0.000737,
+      "stac_item_metadata_sha256": "f63c1115f7b832762db557f94b77e27b8bbc2bc06544cebb4e35fdea34643727",
+      "asset_hrefs": {
+        "red": "https://sentinel-cogs.s3.us-west-2.amazonaws.com/sentinel-s2-l2a-cogs/30/T/VK/2024/8/S2B_30TVK_20240815_0_L2A/B04.tif",
+        "nir": "https://sentinel-cogs.s3.us-west-2.amazonaws.com/sentinel-s2-l2a-cogs/30/T/VK/2024/8/S2B_30TVK_20240815_0_L2A/B08.tif",
+        "scl": "https://sentinel-cogs.s3.us-west-2.amazonaws.com/sentinel-s2-l2a-cogs/30/T/VK/2024/8/S2B_30TVK_20240815_0_L2A/SCL.tif"
+      },
+      "calibration": {
+        "red": {
+          "scale": 0.0001,
+          "effective_offset": 0.0
+        },
+        "nir": {
+          "scale": 0.0001,
+          "effective_offset": 0.0
+        }
+      }
+    }
+  },
+  "difference": {
+    "n_overlap_pixels": 9887,
+    "overlap_fraction_of_grid": 0.941081,
+    "mean_difference_on_overlap": -0.03521135449409485,
+    "overlap_below_descriptive_threshold": false,
+    "interpretation": "Descriptive difference, not a temporal trend or causal estimate"
+  },
+  "both_periods_meet_minimum_valid_fraction": true,
+  "caution": "No inferential analysis. Scene-wide cloud screening and two acquisitions cannot establish ecological change or long-term trends."
+}

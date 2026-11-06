@@ -43,6 +43,7 @@ All source code in this repository is a fresh standalone demonstration prepared 
 ## Methods and references
 
 - [Methods, assumptions, reproducibility and authoritative sources](docs/METHODS.md)
+- [Offline test and execution verification record](docs/VERIFICATION.md)
 - [`config/madrid_demo.json`](config/madrid_demo.json) specifies the public example location, resolution and search windows.
 - [Original synthetic numerical QA exercise](src/qa_demo.py) remains available for comparison.
 

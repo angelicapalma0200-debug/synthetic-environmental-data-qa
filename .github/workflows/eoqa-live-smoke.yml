@@ -1,5 +1,5 @@
 name: Sentinel-2 public smoke test
-# Diagnostic rerun: report the STAC service response on HTTP errors.
+# Retest after explicit RFC3339 bounds as required by Earth Search.
 
 on:
   push:

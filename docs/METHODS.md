@@ -10,6 +10,14 @@ Live candidates are filtered by scene-level `eo:cloud_cover`, the availability o
 
 The geographical AOI is projected to EPSG:32630, with a 10 m pixel grid anchored to multiples of the pixel size. Nearest-neighbour reprojection aligns the 10 m reflectance bands and the 20 m SCL without mixing categorical classes. An AOI mask excludes target pixels outside the requested geographic rectangle. Reprojection cannot recover information missing from the source or improve the actual native resolution.
 
+## Reproducible public imagery example
+
+The [permanent example folder](../examples/real/madrid-2024/) includes five small GeoTIFFs (two NDVI, two QA-classification outputs, and one paired-date difference), a [PNG quicklook](../examples/real/madrid-2024/ndvi_quicklook.png), and [JSON provenance](../examples/real/madrid-2024/report.json).
+
+The [public real-data workflow run](https://github.com/angelicapalma0200-debug/synthetic-environmental-data-qa/actions/runs/42161351695) completed retrieval and processing with Earth Search STAC. The [publication workflow](https://github.com/angelicapalma0200-debug/synthetic-environmental-data-qa/actions/runs/42161554602) verified and committed those exact seven outputs, independent of the private research repository. Scene IDs, calibration metadata, grid extent, valid support and asset URLs are recorded in the JSON report; the full external source-asset bytes were not independently hashed.
+
+The demo was executed with acquisitions from 17 April and 15 August 2024. Neither the two-scene contrast nor the small AOI is intended as a test of environmental trends, ecosystem condition or satellite measurement accuracy.
+
 ## Reflectance calibration safeguard
 
 Sentinel-2 Level-2A processing baseline 04.00 introduced a BOA offset to stored digital numbers. Some Earth Search COGs already have that offset applied. Moreover, the `raster:bands.offset` attribute may disagree with the item-level `earthsearch:boa_offset_applied` flag. Applying the offset twice biases spectral indices.

@@ -1,0 +1,55 @@
+name: Sentinel-2 public smoke test
+
+on:
+  push:
+    paths:
+      - ".github/workflows/eoqa-live-smoke.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: eoqa-live-smoke-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  madrid-public-scenes:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - name: Check out public demonstration repository
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install public dependencies
+        run: python -m pip install -r requirements.txt
+      - name: Process bounded public Sentinel-2 scenes
+        run: python -m eoqa.demo --mode live --config config/madrid_demo.json --out output/live
+      - name: Verify provenance and output products
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path("output/live/results")
+          result=json.loads((p/"report.json").read_text())
+          assert set(result["periods"])=={"earlier","later"}
+          assert all(not x["item_id"].startswith("SYNTHETIC") for x in result["periods"].values())
+          for name in ("ndvi_earlier.tif","ndvi_later.tif",
+                       "qa_earlier.tif","qa_later.tif",
+                       "ndvi_difference.tif","ndvi_quicklook.png"):
+              assert (p/name).is_file(), name
+          print(json.dumps({"items":{k:v["item_id"] for k,v in result["periods"].items()},
+                            "valid_pixels":{k:v["n_valid_pixels"] for k,v in result["periods"].items()},
+                            "paired":result["difference"]["n_overlap_pixels"]}, indent=2))
+          PY
+      - name: Retain small public sample outputs for review
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sentinel2-madrid-demo-review
+          path: output/live/results/
+          retention-days: 7
+          if-no-files-found: error

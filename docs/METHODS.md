@@ -6,7 +6,7 @@ A deliberately small public example, independent of any research project, uses a
 
 ## Selection and spatial alignment
 
-Live candidates are filtered by scene-level `eo:cloud_cover`, the availability of `red`, `nir`, and `scl` assets, and STAC bounding-box containment. Sorting by (cloud percentage, acquisition timestamp, item ID) makes selection independent of API order. The entire scene footprint is not geometrically verified, and there is no automatic second-best scene substitution if the selected scene has poor AOI coverage. Raster coverage is quantified *after reading*.
+Live candidates are filtered by scene-level `eo:cloud_cover`, the availability of `red`, `nir`, and `scl` assets, and STAC bounding-box containment. STAC results are collected through at most 10 pages (maximum 600 candidates); only same-origin HTTPS pagination URLs are allowed and repeated links are rejected. Exceeding the bound fails explicitly instead of selecting from a partial inventory. Sorting by (cloud percentage, acquisition timestamp, item ID) makes selection independent of API order. The entire scene footprint is not geometrically verified, and there is no automatic second-best scene substitution if the selected scene has poor AOI coverage. Raster coverage is quantified *after reading*.
 
 The geographical AOI is projected to EPSG:32630, with a 10 m pixel grid anchored to multiples of the pixel size. Nearest-neighbour reprojection aligns the 10 m reflectance bands and the 20 m SCL without mixing categorical classes. An AOI mask excludes target pixels outside the requested geographic rectangle. Reprojection cannot recover information missing from the source or improve the actual native resolution.
 

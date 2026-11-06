@@ -7,7 +7,7 @@ import rasterio
 
 from eoqa.core import (InputError, QA_SCL_EXCLUDED, QA_SPECTRAL_INVALID,
                        QA_VALID, choose_item, compare_dates, compute_ndvi,
-                       make_grid, process_item, reflectance_calibration)
+                       make_grid, process_item, reflectance_calibration, search_items)
 from eoqa.demo import run_offline
 
 
@@ -82,6 +82,49 @@ class TestSelection(unittest.TestCase):
         self.assertGreater(int(grid.aoi_mask.sum()), 100)
         with self.assertRaises(InputError):
             make_grid([-4, 40, -2, 42])
+
+
+class TestSTACPagination(unittest.TestCase):
+    def test_two_pages_without_network(self):
+        class Response:
+            ok = True
+            def __init__(self, payload):
+                self.payload = payload
+            def json(self):
+                return self.payload
+        class Session:
+            def __init__(self):
+                self.calls = []
+            def post(self, url, json, timeout):
+                self.calls.append((url, json))
+                if "token" not in json:
+                    return Response({"features": [{"id": "first"}], "links": [{
+                        "rel": "next", "href": "https://earth-search.aws.element84.com/v1/search",
+                        "method": "POST", "body": {"token": "page-2"},
+                    }]})
+                return Response({"features": [{"id": "second"}], "links": []})
+        session = Session()
+        items = search_items([-3.7, 40.4, -3.6, 40.5],
+                             "2024-01-01T00:00:00Z/2024-01-31T23:59:59Z",
+                             50, session=session)
+        self.assertEqual([i["id"] for i in items], ["first", "second"])
+        self.assertEqual(len(session.calls), 2)
+
+    def test_blocks_external_pagination_url(self):
+        class Response:
+            ok = True
+            def json(self):
+                return {"features": [{"id": "first"}], "links": [{
+                    "rel": "next", "href": "https://untrusted.example.org/leak",
+                    "method": "GET",
+                }]}
+        class Session:
+            def post(self, *args, **kwargs):
+                return Response()
+        with self.assertRaises(InputError):
+            search_items([-3.7, 40.4, -3.6, 40.5],
+                         "2024-01-01T00:00:00Z/2024-01-31T23:59:59Z",
+                         50, session=Session())
 
 
 class TestIntegration(unittest.TestCase):

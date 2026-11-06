@@ -1,4 +1,5 @@
 name: Sentinel-2 public smoke test
+# Diagnostic rerun: report the STAC service response on HTTP errors.
 
 on:
   push:

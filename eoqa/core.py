@@ -12,6 +12,7 @@ import platform
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
+from urllib.parse import urljoin, urlparse
 
 import numpy as np
 import matplotlib
@@ -92,7 +93,7 @@ def make_grid(bbox: list[float], epsg: int = 32630, resolution: float = 10.0) ->
 
 def search_items(bbox: list[float], interval: str, cloud_max: float,
                  session: requests.Session | None = None) -> list[dict[str, Any]]:
-    """Bounded STAC search; scene-level cloud percentage is only a screening field."""
+    """Bounded, paginated STAC query with deterministic client-side selection."""
     if not (0 <= cloud_max <= 100):
         raise InputError("cloud_max must be within [0, 100]")
     request = {
@@ -101,15 +102,45 @@ def search_items(bbox: list[float], interval: str, cloud_max: float,
         "query": {"eo:cloud_cover": {"lte": cloud_max}},
     }
     client = session or requests.Session()
-    response = client.post(STAC_API, json=request, timeout=40)
-    if not response.ok:
-        raise InputError(f"STAC search HTTP {response.status_code}: {response.text[:1200]}")
-    result = response.json()
-    if not isinstance(result, dict) or not isinstance(result.get("features"), list):
-        raise InputError("STAC response is not a FeatureCollection")
-    if result.get("links") and any(link.get("rel") == "next" for link in result["links"]):
-        raise InputError("STAC result was paginated; expand the date interval selection logic")
-    return result["features"]
+    page_url = STAC_API
+    method = "POST"
+    body = request
+    results: list[dict[str, Any]] = []
+    seen_links: set[tuple[str, str, str]] = set()
+    for _ in range(10):  # explicit bound, rather than silently truncating candidates
+        response = (client.post(page_url, json=body, timeout=40)
+                    if method == "POST" else client.get(page_url, timeout=40))
+        if not response.ok:
+            raise InputError(f"STAC search HTTP {response.status_code}: {response.text[:1200]}")
+        payload = response.json()
+        if not isinstance(payload, dict) or not isinstance(payload.get("features"), list):
+            raise InputError("STAC response is not a FeatureCollection")
+        results.extend(payload["features"])
+        if len(results) > 600:
+            raise InputError("STAC safety limit: more than 600 candidate items")
+        nxt = next((link for link in payload.get("links", [])
+                    if link.get("rel") == "next"), None)
+        if nxt is None:
+            return results
+        page_url = urljoin(page_url, nxt.get("href", ""))
+        if (urlparse(page_url).scheme != "https"
+                or urlparse(page_url).netloc != urlparse(STAC_API).netloc
+                or not urlparse(page_url).path.startswith("/v1/")):
+            raise InputError("STAC pagination URL is not a trusted Earth Search v1 endpoint")
+        method = str(nxt.get("method", "GET")).upper()
+        if method not in ("GET", "POST"):
+            raise InputError("STAC pagination method is unsupported")
+        if method == "POST":
+            body = nxt.get("body")
+            if not isinstance(body, dict):
+                raise InputError("STAC next POST link lacks its request body")
+        else:
+            body = None
+        marker = (method, page_url, json.dumps(body, sort_keys=True))
+        if marker in seen_links:
+            raise InputError("STAC pagination repeated the same page")
+        seen_links.add(marker)
+    raise InputError("STAC search exceeded the 10-page safety bound")
 
 
 def _bbox_contained(candidate: dict[str, Any], bbox: list[float]) -> bool:

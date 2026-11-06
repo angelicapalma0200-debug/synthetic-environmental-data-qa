@@ -15,7 +15,7 @@ python -m eoqa.demo --mode offline --out output/offline
 
 All **12 unit/integration tests** in `tests/test_core.py` passed, including two cases for bounded STAC pagination and rejection of untrusted cross-origin pagination URLs. The offline workflow generated five georeferenced GeoTIFFs, an explicitly synthetic PNG and a JSON QA/provenance report.
 
-A separate [public GitHub-hosted offline CI run #42161230433](https://github.com/angelicapalma0200-debug/synthetic-environmental-data-qa/actions/runs/42161230433) also finished **successfully** under Ubuntu 24.04 and Python 3.11. This GitHub-hosted run installed dependencies, executed tests and regenerated the synthetic rasters. The original numerical-only exercise and its older tests remain present but are not part of the 12-test count.
+A separate [public GitHub-hosted offline CI run #42161230433](https://github.com/angelicapalma0200-debug/synthetic-environmental-data-qa/actions/runs/42161230433) also finished **successfully** under Ubuntu 24.04 and Python 3.11. This GitHub-hosted run installed dependencies, completed **15 tests total** (12 EOQA tests plus 3 original numerical QA tests, as recorded in its job logs), and regenerated the synthetic rasters. The original numerical-only exercise and its older tests remain present but are not part of the 12-test count.
 
 ### Synthetic fixture, not observed data
 

@@ -1,0 +1,11 @@
+{
+  "site_label": "Madrid urban mosaic, Spain (outside the study region)",
+  "bbox": [-3.691, 40.412, -3.679, 40.421],
+  "target_epsg": 32630,
+  "resolution_m": 10,
+  "max_scene_cloud_pct": 50,
+  "intervals": {
+    "earlier": "2024-04-15/2024-05-31",
+    "later": "2024-08-15/2024-09-30"
+  }
+}

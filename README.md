@@ -1,5 +1,7 @@
 # Environmental Data QA: a reproducible Sentinel-2 example
 
+[![EOQA offline validation](https://github.com/angelicapalma0200-debug/synthetic-environmental-data-qa/actions/workflows/eoqa-offline-ci.yml/badge.svg)](https://github.com/angelicapalma0200-debug/synthetic-environmental-data-qa/actions/workflows/eoqa-offline-ci.yml)
+
 **A small, independent example of geospatial data acquisition and quality assessment.** The previous synthetic-only exercise remains available in [`src/qa_demo.py`](src/qa_demo.py). This repository now also contains a more substantial Earth-observation workflow in [`eoqa/`](eoqa/).
 
 **Two modes:** an **offline, deterministic raster fixture** (runs without internet) and an **optional real-data mode** using public Sentinel-2 Level-2A imagery from Element 84 Earth Search STAC. The example area is a small urban mosaic in Madrid, Spain, outside the author's doctoral study region.

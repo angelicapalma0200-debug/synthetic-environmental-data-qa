@@ -1,5 +1,5 @@
 name: Sentinel-2 public smoke test
-# Retest after explicit RFC3339 bounds as required by Earth Search.
+# Retest public Sentinel-2 scene processing after bounded STAC pagination.
 
 on:
   push:

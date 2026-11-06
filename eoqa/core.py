@@ -102,7 +102,8 @@ def search_items(bbox: list[float], interval: str, cloud_max: float,
     }
     client = session or requests.Session()
     response = client.post(STAC_API, json=request, timeout=40)
-    response.raise_for_status()
+    if not response.ok:
+        raise InputError(f"STAC search HTTP {response.status_code}: {response.text[:1200]}")
     result = response.json()
     if not isinstance(result, dict) or not isinstance(result.get("features"), list):
         raise InputError("STAC response is not a FeatureCollection")

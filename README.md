@@ -50,9 +50,9 @@ Each run writes `ndvi_earlier.tif`, `ndvi_later.tif`, `qa_earlier.tif`, `qa_late
 
 The live selection tests only bounding-box containment, not exact pixel-footprint coverage. A scene may therefore have incomplete local coverage, which must be evaluated through the final QA counts. The calibration policy specifically addresses a documented Earth Search metadata ambiguity (see [methods and sources](docs/METHODS.md)).
 
-## Transparency and privacy
+## Development and transparency
 
-All source code in this repository is a fresh standalone demonstration prepared with AI assistance. It is not copied from, and does not contain data, algorithms, credentials, site coordinates, or unpublished results from, any private research repository. Local execution and tests demonstrate software behavior; **they do not establish independent programming proficiency** or validate remote data availability.
+This independent demonstration was developed with AI assistance. It uses public Sentinel-2 imagery and clearly identified synthetic test data. Source code, methods, automated tests, and public execution records are provided for review and reproducibility. No confidential research data, credentials, or unpublished results are included.
 
 ## Methods and references
 

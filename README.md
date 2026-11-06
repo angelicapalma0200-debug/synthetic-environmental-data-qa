@@ -6,7 +6,7 @@
 
 **Two modes:** an **offline, deterministic raster fixture** (runs without internet) and an **optional real-data mode** using public Sentinel-2 Level-2A imagery from Element 84 Earth Search STAC. The example area is a small urban mosaic in Madrid, Spain, outside the author's doctoral study region.
 
-> **Verification status:** all 12 offline unit/integration tests passed locally and in [public GitHub CI](https://github.com/angelicapalma0200-debug/synthetic-environmental-data-qa/actions/runs/42161230433). A separate [GitHub-hosted live run](https://github.com/angelicapalma0200-debug/synthetic-environmental-data-qa/actions/runs/42161351695) **successfully accessed real Sentinel-2 scenes and produced the documented raster outputs**. This is software execution evidence, not independent radiometric or ecological validation.
+> **Verification status:** 12 new EOQA unit/integration tests passed locally; [public GitHub CI](https://github.com/angelicapalma0200-debug/synthetic-environmental-data-qa/actions/runs/42161230433) passed **15 total tests**, including three retained synthetic numerical QA tests. A separate [GitHub-hosted live run](https://github.com/angelicapalma0200-debug/synthetic-environmental-data-qa/actions/runs/42161351695) **successfully accessed real Sentinel-2 scenes and produced the documented raster outputs**. This is software execution evidence, not independent radiometric or ecological validation.
 
 ## Verified public Sentinel-2 demonstration
 

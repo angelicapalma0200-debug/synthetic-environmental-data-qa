@@ -6,7 +6,19 @@
 
 **Two modes:** an **offline, deterministic raster fixture** (runs without internet) and an **optional real-data mode** using public Sentinel-2 Level-2A imagery from Element 84 Earth Search STAC. The example area is a small urban mosaic in Madrid, Spain, outside the author's doctoral study region.
 
-> **Verification status:** the offline mode and unit/integration tests have been executed locally. Local offline tests pass; public GitHub-hosted live checks have established access to the Earth Search STAC API, but **full real-scene processing is not yet validated**. See the [verification log](docs/VERIFICATION.md) for recorded external errors and current evidence.
+> **Verification status:** all 12 offline unit/integration tests passed locally and in [public GitHub CI](https://github.com/angelicapalma0200-debug/synthetic-environmental-data-qa/actions/runs/42161230433). A separate [GitHub-hosted live run](https://github.com/angelicapalma0200-debug/synthetic-environmental-data-qa/actions/runs/42161351695) **successfully accessed real Sentinel-2 scenes and produced the documented raster outputs**. This is software execution evidence, not independent radiometric or ecological validation.
+
+## Verified public Sentinel-2 demonstration
+
+![Real Sentinel-2 L2A NDVI images and descriptive pixel-wise difference in Madrid, Spain, 2024](examples/real/madrid-2024/ndvi_quicklook.png)
+
+The reproducible [live GitHub Actions run #42161351695](https://github.com/angelicapalma0200-debug/synthetic-environmental-data-qa/actions/runs/42161351695) processed public scenes `S2B_30TVK_20240417_0_L2A` (17 April 2024) and `S2B_30TVK_20240815_0_L2A` (15 August 2024). Among 10,163 AOI pixels, 9,899 and 9,915 respectively passed the illustrative per-scene QA. There were 9,887 valid paired pixels. All of these counts are **technical processing results** for a small urban example, not claims about ecological change.
+
+- [Inspect the permanent real-data examples (5 GeoTIFFs, PNG, JSON)](examples/real/madrid-2024/)
+- [Read the complete machine-readable provenance and QA report](examples/real/madrid-2024/report.json)
+- [Inspect the GitHub-hosted validation and publication record](docs/VERIFICATION.md)
+
+The 2024 sample products are attributed as: *Contains modified Copernicus Sentinel data (2024).* Pixel-wise differences are descriptive and may reflect phenology, observation conditions, or processing uncertainties.
 
 ## What the workflow does
 

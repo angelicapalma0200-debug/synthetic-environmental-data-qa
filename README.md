@@ -6,11 +6,11 @@
 
 **Two modes:** an **offline, deterministic raster fixture** (runs without internet) and an **optional real-data mode** using public Sentinel-2 Level-2A imagery from Element 84 Earth Search STAC. The example area is a small urban mosaic in Madrid, Spain, outside the author's doctoral study region.
 
-> **Verification status:** the offline mode and unit/integration tests have been executed locally. The live STAC acquisition and cloud-hosted raster reads have **not** been executed in the authoring environment, which has no outbound internet access. Do not treat the live path as verified until running it in an internet-connected environment.
+> **Verification status:** the offline mode and unit/integration tests have been executed locally. Local offline tests pass; public GitHub-hosted live checks have established access to the Earth Search STAC API, but **full real-scene processing is not yet validated**. See the [verification log](docs/VERIFICATION.md) for recorded external errors and current evidence.
 
 ## What the workflow does
 
-1. Selects two scenes in declared time windows. In live mode, the deterministic criterion is lowest scene-wide reported cloud cover among items with required assets and bounding-box coverage.
+1. Searches the declared windows using **bounded STAC pagination** (maximum 10 pages or 600 candidates) and selects two scenes. In live mode, the deterministic criterion is lowest scene-wide reported cloud cover among items with required assets and bounding-box coverage.
 2. Reads red (B04), NIR (B08), and 20 m SCL scene-classification layers; aligns them onto a fixed 10 m grid with nearest-neighbour resampling.
 3. Converts digital numbers to reflectance **without silently double-applying Sentinel-2 processing-baseline offsets**. If the provider's calibration metadata is ambiguous, the pipeline stops instead of guessing.
 4. Classifies valid land pixels (SCL 4 and 5), rejects clouds/shadows/water/uncertain classes, and computes NDVI only with valid observations.

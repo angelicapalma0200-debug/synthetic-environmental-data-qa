@@ -66,8 +66,8 @@ Three earlier bounded runs stopped and are retained in GitHub Actions history:
 
 The query now enforces full timestamp bounds and bounded, same-origin STAC pagination. The subsequently successful run demonstrates that those immediate implementation defects were corrected **for the chosen example**.
 
-## 4. Scope of verification and ethical disclosure
+## 4. Scope of verification and development transparency
 
-The verified end-to-end pipeline establishes that the released code can process two specified Sentinel-2 L2A acquisitions with the current service configuration. It does **not** establish global portability, field validation of SCL, physical reflectance accuracy against an independent benchmark, temporal representativeness, or proficiency in writing every line of code without assistance.
+The verified end-to-end run demonstrates processing of the two specified Sentinel-2 L2A acquisitions under the documented conditions. It does not establish portability to all dates or providers, independently validate SCL classification or reflectance calibration, or support ecological-change inference.
 
-The project was implemented with AI assistance and reviewed through automated testing and public execution. It has no dependency on private doctoral repositories, unpublished scientific data, Google Earth Engine credentials, or self-hosted scientific runners.
+Development involved AI assistance. Code, methods, tests, execution logs, and example outputs are available for inspection. The demonstration does not require private research data, credentials, or scientific computing infrastructure.

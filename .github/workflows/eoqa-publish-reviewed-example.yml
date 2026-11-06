@@ -1,0 +1,65 @@
+name: Publish verified public Sentinel-2 sample
+
+on:
+  push:
+    paths:
+      - ".github/workflows/eoqa-publish-reviewed-example.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: read
+
+concurrency:
+  group: eoqa-publish-review-sample
+  cancel-in-progress: false
+
+jobs:
+  publish-reviewed-output:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - name: Check out public repository
+        uses: actions/checkout@v4
+
+      - name: Download exact successful public run artifact
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh run download 42161351695 --repo "${{ github.repository }}" --name sentinel2-madrid-demo-review --dir output/verified
+
+      - name: Validate independent source identity and file presence
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import json
+          p = Path("output/verified")
+          report = json.loads((p / "report.json").read_text(encoding="utf-8"))
+          expected = {
+              "earlier": "S2B_30TVK_20240417_0_L2A",
+              "later": "S2B_30TVK_20240815_0_L2A",
+          }
+          assert {key: item["item_id"] for key, item in report["periods"].items()} == expected
+          assert report["difference"]["n_overlap_pixels"] == 9887
+          assert report["purpose"] == "Independent demonstration; not evidence of ecological change"
+          expected_files = (
+              "ndvi_earlier.tif", "ndvi_later.tif", "qa_earlier.tif",
+              "qa_later.tif", "ndvi_difference.tif", "ndvi_quicklook.png",
+              "report.json",
+          )
+          assert sorted(f.name for f in p.iterdir()) == sorted(expected_files)
+          assert all((p / name).is_file() and (p / name).stat().st_size > 0 for name in expected_files)
+          print("Validated all seven files against successful GitHub Actions run #42161351695.")
+          PY
+
+      - name: Commit small real-data example to the public repository
+        run: |
+          mkdir -p examples/real/madrid-2024
+          cp output/verified/* examples/real/madrid-2024/
+          git add examples/real/madrid-2024
+          if git diff --cached --quiet; then
+            echo "No changes to reviewed sample."
+          else
+            git -c user.name="github-actions[bot]" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" commit -m "data: publish verified tiny Sentinel-2 Madrid example (2024)"
+            git push origin HEAD:main
+          fi
